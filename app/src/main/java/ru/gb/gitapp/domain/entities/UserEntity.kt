@@ -1,4 +1,4 @@
-package ru.gb.gitapp.domain
+package ru.gb.gitapp.domain.entities
 
 data class UserEntity(
     val login: String,

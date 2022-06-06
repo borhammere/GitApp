@@ -5,11 +5,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.gb.gitapp.App
 import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
-import ru.gb.gitapp.domain.UserEntity
-import ru.gb.gitapp.domain.UsersRepo
+import ru.gb.gitapp.domain.entities.UserEntity
+import ru.gb.gitapp.domain.repos.UsersRepo
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

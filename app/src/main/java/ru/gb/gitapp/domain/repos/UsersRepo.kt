@@ -1,4 +1,6 @@
-package ru.gb.gitapp.domain
+package ru.gb.gitapp.domain.repos
+
+import ru.gb.gitapp.domain.entities.UserEntity
 
 interface UsersRepo {
     // C_R_UD
