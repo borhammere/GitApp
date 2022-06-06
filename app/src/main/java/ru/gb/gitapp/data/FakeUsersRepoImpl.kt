@@ -1,7 +1,9 @@
-package ru.gb.gitapp
+package ru.gb.gitapp.data
 
 import android.os.Handler
 import android.os.Looper
+import ru.gb.gitapp.domain.UserEntity
+import ru.gb.gitapp.domain.UsersRepo
 
 private const val DATA_LOADING_FAKE_DELAY = 3_000L
 

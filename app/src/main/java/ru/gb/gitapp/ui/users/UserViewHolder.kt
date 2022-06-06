@@ -1,10 +1,12 @@
-package ru.gb.gitapp
+package ru.gb.gitapp.ui.users
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import ru.gb.gitapp.R
 import ru.gb.gitapp.databinding.ItemUserBinding
+import ru.gb.gitapp.domain.UserEntity
 
 class UserViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false)

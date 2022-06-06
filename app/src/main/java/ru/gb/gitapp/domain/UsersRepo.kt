@@ -1,4 +1,4 @@
-package ru.gb.gitapp
+package ru.gb.gitapp.domain
 
 interface UsersRepo {
     // C_R_UD
