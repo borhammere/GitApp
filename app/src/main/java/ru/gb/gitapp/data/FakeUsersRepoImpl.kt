@@ -5,7 +5,7 @@ import android.os.Looper
 import ru.gb.gitapp.domain.entities.UserEntity
 import ru.gb.gitapp.domain.repos.UsersRepo
 
-private const val DATA_LOADING_FAKE_DELAY = 3_000L
+private const val DATA_LOADING_FAKE_DELAY = 5_000L
 
 class FakeUsersRepoImpl : UsersRepo {
 
@@ -18,6 +18,7 @@ class FakeUsersRepoImpl : UsersRepo {
     override fun getUsers(onSuccess: (List<UserEntity>) -> Unit, onError: ((Throwable) -> Unit)?) {
         Handler(Looper.getMainLooper()).postDelayed({
             onSuccess(data)
+            // onError?.invoke(IllegalStateException("Я ошибка!"))
         }, DATA_LOADING_FAKE_DELAY)
     }
 
