@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
-import ru.gb.gitapp.domain.repos.UsersRepo
 
 class MainActivity : AppCompatActivity(), UsersContract.View {
     private lateinit var binding: ActivityMainBinding
@@ -23,13 +22,22 @@ class MainActivity : AppCompatActivity(), UsersContract.View {
 
         initViews()
 
-        presenter = UsersPresenter(app.usersRepo)
+        presenter = extractPresenter()
         presenter.attach(this)
+    }
+
+    private fun extractPresenter(): UsersContract.Presenter {
+        return lastCustomNonConfigurationInstance as? UsersContract.Presenter
+            ?: UsersPresenter(app.usersRepo)
     }
 
     override fun onDestroy() {
         presenter.detach()
         super.onDestroy()
+    }
+
+    override fun onRetainCustomNonConfigurationInstance(): UsersContract.Presenter {
+        return presenter
     }
 
     private fun initViews() {
