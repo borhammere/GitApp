@@ -18,6 +18,10 @@ class RetrofitUsersRepoImpl : UsersRepo {
         .build()
     private val api: GithubApi = retrofit.create(GithubApi::class.java)
 
+    override fun saveUsers(users: List<UserEntity>) {
+        TODO("Not yet implemented")
+    }
+
 
     override fun getUsers(onSuccess: (List<UserEntity>) -> Unit, onError: ((Throwable) -> Unit)?) {
         api.getUsers().enqueue(object : Callback<List<UserEntity>> {

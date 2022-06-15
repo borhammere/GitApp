@@ -15,6 +15,10 @@ class FakeUsersRepoImpl : UsersRepo {
         UserEntity("pjhyett", 3, "https://avatars.githubusercontent.com/u/3?v=4"),
     )
 
+    override fun saveUsers(users: List<UserEntity>) {
+        TODO("Not yet implemented")
+    }
+
     override fun getUsers(onSuccess: (List<UserEntity>) -> Unit, onError: ((Throwable) -> Unit)?) {
         Handler(Looper.getMainLooper()).postDelayed({
              onSuccess(data)

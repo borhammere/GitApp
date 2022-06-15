@@ -9,6 +9,9 @@ interface UsersRepo {
     // (-) Update
     // (-) Delete
 
+    // Create
+    fun saveUsers(users: List<UserEntity>)
+
     // Read
     fun getUsers(
         onSuccess: (List<UserEntity>) -> Unit,
