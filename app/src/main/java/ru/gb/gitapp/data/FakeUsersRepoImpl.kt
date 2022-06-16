@@ -2,6 +2,7 @@ package ru.gb.gitapp.data
 
 import android.os.Handler
 import android.os.Looper
+import io.reactivex.rxjava3.core.Single
 import ru.gb.gitapp.domain.entities.UserEntity
 import ru.gb.gitapp.domain.repos.UsersRepo
 
@@ -21,5 +22,7 @@ class FakeUsersRepoImpl : UsersRepo {
              onError?.invoke(IllegalStateException("Я ошибка!"))
         }, DATA_LOADING_FAKE_DELAY)
     }
+
+    override fun getUsers(): Single<List<UserEntity>> = Single.just(data)
 
 }

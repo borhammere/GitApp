@@ -1,5 +1,6 @@
 package ru.gb.gitapp.domain.repos
 
+import io.reactivex.rxjava3.core.Single
 import ru.gb.gitapp.domain.entities.UserEntity
 
 interface UsersRepo {
@@ -9,10 +10,13 @@ interface UsersRepo {
     // (-) Update
     // (-) Delete
 
-    // Read
+    // Callback
     fun getUsers(
         onSuccess: (List<UserEntity>) -> Unit,
         onError: ((Throwable) -> Unit)? = null
     )
+
+    // Callback
+    fun getUsers() : Single<List<UserEntity>>
 
 }

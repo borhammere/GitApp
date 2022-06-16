@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
@@ -19,22 +20,29 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UsersContract.ViewModel
 
+    private val viewModelDisposable = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initViews()
-        initViewModel()
-    }
 
-    private fun initViewModel() {
         viewModel = extractViewModel()
 
-        viewModel.progressLiveData.observe(this) { showProgress(it) }
-        viewModel.usersLiveData.observe(this) { showUsers(it) }
-        viewModel.errorLiveData.observe(this) { showError(it) }
-        viewModel.openProfileLiveData.observe(this) { openProfileScreen() }
+        viewModelDisposable.addAll(
+            viewModel.progressLiveData.subscribe { showProgress(it) },
+            viewModel.usersLiveData.subscribe { showUsers(it) },
+            viewModel.errorLiveData.subscribe { showError(it) },
+            viewModel.openProfileLiveData.subscribe { openProfileScreen() }
+        )
+
+    }
+
+    override fun onDestroy() {
+        viewModelDisposable.dispose()
+        super.onDestroy()
     }
 
     private fun openProfileScreen() {
