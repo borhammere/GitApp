@@ -7,5 +7,5 @@ import ru.gb.gitapp.domain.entities.UserEntity
 
 interface GithubApi {
     @GET("users")
-    fun getUsers(): Single<List<UserEntity>>
+    fun getUsers(): Single<List<UserEntityDto>>
 }

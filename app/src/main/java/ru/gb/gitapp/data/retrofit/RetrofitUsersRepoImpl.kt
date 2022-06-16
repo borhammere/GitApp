@@ -20,8 +20,8 @@ class RetrofitUsersRepoImpl : UsersRepo {
 
     override fun getUsers(onSuccess: (List<UserEntity>) -> Unit, onError: ((Throwable) -> Unit)?) {
         api.getUsers().subscribeBy(
-            onSuccess = {
-                onSuccess.invoke(it)
+            onSuccess = { users ->
+                onSuccess.invoke(users.map { it.toUserEntity() })
             },
             onError = {
                 onError?.invoke(it)
@@ -30,5 +30,10 @@ class RetrofitUsersRepoImpl : UsersRepo {
     }
 
     override fun getUsers(): Single<List<UserEntity>> = api.getUsers()
+        .map { users ->
+            users.map {
+                it.toUserEntity()
+            }
+        }
 
 }
