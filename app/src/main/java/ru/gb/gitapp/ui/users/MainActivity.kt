@@ -1,5 +1,6 @@
 package ru.gb.gitapp.ui.users
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
+import ru.gb.gitapp.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val adapter = UsersAdapter()
+    private val adapter = UsersAdapter {
+        viewModel.onUserClick(it)
+    }
 
     private lateinit var viewModel: UsersContract.ViewModel
 
@@ -30,6 +34,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.progressLiveData.observe(this) { showProgress(it) }
         viewModel.usersLiveData.observe(this) { showUsers(it) }
         viewModel.errorLiveData.observe(this) { showError(it) }
+        viewModel.openProfileLiveData.observe(this) { openProfileScreen() }
+    }
+
+    private fun openProfileScreen() {
+        startActivity(Intent(this, ProfileActivity::class.java))
     }
 
     private fun extractViewModel(): UsersContract.ViewModel {
