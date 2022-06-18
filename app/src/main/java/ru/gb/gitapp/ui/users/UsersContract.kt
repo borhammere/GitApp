@@ -1,20 +1,18 @@
 package ru.gb.gitapp.ui.users
 
+import androidx.lifecycle.LiveData
 import ru.gb.gitapp.domain.entities.UserEntity
 
 interface UsersContract {
 
-    interface View {
-        fun showUsers(users: List<UserEntity>)
-        fun showError(throwable: Throwable)
-        fun showProgress(inProgress: Boolean)
-    }
-
-    interface Presenter {
-        fun attach(view: View)
-        fun detach()
+    interface ViewModel {
+        val usersLiveData: LiveData<List<UserEntity>>
+        val errorLiveData: LiveData<Throwable>
+        val progressLiveData: LiveData<Boolean>
+        val openProfileLiveData: LiveData<Unit>
 
         fun onRefresh()
+        fun onUserClick(userEntity: UserEntity)
     }
 
 }
