@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.gb.gitapp.app
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
 import ru.gb.gitapp.domain.repos.UsersRepo
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.onUserClick(it)
     }
 
-    private val usersRepo: UsersRepo by lazy { app.usersRepo }
+    private val usersRepo: UsersRepo by inject()
 
     private lateinit var viewModel: UsersContract.ViewModel
 
