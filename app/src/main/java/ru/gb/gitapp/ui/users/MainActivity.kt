@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
+import ru.gb.gitapp.domain.repos.UsersRepo
 import ru.gb.gitapp.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     private val adapter = UsersAdapter {
         viewModel.onUserClick(it)
     }
+
+    private val usersRepo: UsersRepo by lazy { app.usersRepo }
 
     private lateinit var viewModel: UsersContract.ViewModel
 
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun extractViewModel(): UsersContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(app.usersRepo)
+            ?: UsersViewModel(usersRepo)
     }
 
     override fun onRetainCustomNonConfigurationInstance(): UsersContract.ViewModel {
