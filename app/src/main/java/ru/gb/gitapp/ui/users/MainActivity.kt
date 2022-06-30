@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
-import ru.gb.gitapp.domain.repos.UsersRepo
 import ru.gb.gitapp.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
@@ -20,9 +18,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.onUserClick(it)
     }
 
-    private val usersRepo: UsersRepo by inject()
-
-    private lateinit var viewModel: UsersContract.ViewModel
+    private val viewModel: UsersViewModel by viewModel()
 
     private val viewModelDisposable = CompositeDisposable()
 
@@ -33,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         initViews()
 
-        viewModel = extractViewModel()
 
         viewModelDisposable.addAll(
             viewModel.progressLiveData.subscribe { showProgress(it) },
@@ -51,15 +46,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun openProfileScreen() {
         startActivity(Intent(this, ProfileActivity::class.java))
-    }
-
-    private fun extractViewModel(): UsersContract.ViewModel {
-        return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(usersRepo)
-    }
-
-    override fun onRetainCustomNonConfigurationInstance(): UsersContract.ViewModel {
-        return viewModel
     }
 
     private fun initViews() {
