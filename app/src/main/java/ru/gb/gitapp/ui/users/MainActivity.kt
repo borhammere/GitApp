@@ -7,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
+import ru.gb.gitapp.domain.repos.UsersRepo
 import ru.gb.gitapp.ui.profile.ProfileActivity
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -18,7 +20,10 @@ class MainActivity : AppCompatActivity() {
         viewModel.onUserClick(it)
     }
 
-    private val viewModel: UsersViewModel by viewModel()
+    @Inject
+    lateinit var usersRepo: UsersRepo
+
+    private val viewModel: UsersViewModel by lazy { UsersViewModel(usersRepo) }
 
     private val viewModelDisposable = CompositeDisposable()
 
@@ -27,14 +32,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        app.appComponent.inject(this)
+
         initViews()
 
-
         viewModelDisposable.addAll(
-            viewModel.progressLiveData.subscribe { showProgress(it) },
-            viewModel.usersLiveData.subscribe { showUsers(it) },
-            viewModel.errorLiveData.subscribe { showError(it) },
-            viewModel.openProfileLiveData.subscribe { openProfileScreen() }
+            viewModel.progressObservable.subscribe { showProgress(it) },
+            viewModel.usersObservable.subscribe { showUsers(it) },
+            viewModel.errorObservable.subscribe { showError(it) },
+            viewModel.openProfileObservable.subscribe { openProfileScreen() }
         )
 
     }
