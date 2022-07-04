@@ -3,6 +3,7 @@ package ru.gb.gitapp.ui.users
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -11,8 +12,10 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjava3.subjects.Subject
 import ru.gb.gitapp.domain.entities.UserEntity
 import ru.gb.gitapp.domain.repos.UsersRepo
+import javax.inject.Inject
 
-class UsersViewModel(
+@HiltViewModel
+class UsersViewModel @Inject constructor(
     private val usersRepo: UsersRepo
 ) : UsersContract.ViewModel, ViewModel() {
 

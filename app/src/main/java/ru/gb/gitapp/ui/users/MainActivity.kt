@@ -3,27 +3,24 @@ package ru.gb.gitapp.ui.users
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
-import ru.gb.gitapp.domain.repos.UsersRepo
 import ru.gb.gitapp.ui.profile.ProfileActivity
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = UsersAdapter {
         viewModel.onUserClick(it)
     }
 
-    @Inject
-    lateinit var usersRepo: UsersRepo
-
-    private val viewModel: UsersViewModel by lazy { UsersViewModel(usersRepo) }
+    private val viewModel: UsersViewModel by viewModels()
 
     private val viewModelDisposable = CompositeDisposable()
 
@@ -31,8 +28,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        app.appComponent.inject(this)
 
         initViews()
 
