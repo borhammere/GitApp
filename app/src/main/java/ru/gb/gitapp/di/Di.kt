@@ -6,8 +6,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.gb.gitapp.data.retrofit.GithubApi
 import ru.gb.gitapp.data.retrofit.RetrofitUsersRepoImpl
 import ru.gb.gitapp.domain.repos.UsersRepo
+import java.util.*
 
-class Di {
+interface Di {
+    val usersRepo: UsersRepo
+    val randomString: String
+}
+
+class DiImpl : Di {
     private val baseUrl = "https://api.github.com/"
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
@@ -18,5 +24,8 @@ class Di {
     }
     private val api: GithubApi by lazy { retrofit.create(GithubApi::class.java) }
 
-    val usersRepo: UsersRepo by lazy { RetrofitUsersRepoImpl(api) }
+    override val usersRepo: UsersRepo by lazy { RetrofitUsersRepoImpl(api) }
+
+    override val randomString: String
+        get() = UUID.randomUUID().toString()
 }

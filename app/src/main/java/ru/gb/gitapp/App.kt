@@ -4,9 +4,10 @@ import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
 import ru.gb.gitapp.di.Di
+import ru.gb.gitapp.di.DiImpl
 
 class App : Application() {
-    val di = Di()
+    val di: Di = DiImpl()
 }
 
 val Context.app: App get() = applicationContext as App
