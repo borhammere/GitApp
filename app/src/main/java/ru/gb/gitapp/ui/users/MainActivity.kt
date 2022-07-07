@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         binding.refreshButton.setOnClickListener {
             viewModel.onRefresh()
+            Toast.makeText(this, app.di.get(String::class), Toast.LENGTH_SHORT).show()
         }
         initRecyclerView()
 
