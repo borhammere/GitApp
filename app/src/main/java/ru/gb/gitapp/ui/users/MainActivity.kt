@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
+import ru.gb.gitapp.domain.repos.UsersRepo
 import ru.gb.gitapp.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun extractViewModel(): UsersContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(app.di.usersRepo)
+            ?: UsersViewModel(app.di.get(UsersRepo::class))
     }
 
     override fun onRetainCustomNonConfigurationInstance(): UsersContract.ViewModel {

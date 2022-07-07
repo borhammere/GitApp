@@ -7,13 +7,21 @@ import ru.gb.gitapp.data.retrofit.GithubApi
 import ru.gb.gitapp.data.retrofit.RetrofitUsersRepoImpl
 import ru.gb.gitapp.domain.repos.UsersRepo
 import java.util.*
+import kotlin.reflect.KClass
 
 interface Di {
-    val usersRepo: UsersRepo
-    val randomString: String
+    fun <T: Any> get(clazz: KClass<T>): T
 }
 
 class DiImpl : Di {
+    override fun <T: Any> get(clazz: KClass<T>): T {
+        return when (clazz) {
+            UsersRepo::class -> usersRepo as T
+            String::class -> randomString as T
+            else -> throw IllegalArgumentException("Have not class in graph")
+        }
+    }
+
     private val baseUrl = "https://api.github.com/"
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
@@ -22,10 +30,18 @@ class DiImpl : Di {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
     }
+    private val mRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .build()
+    }
     private val api: GithubApi by lazy { retrofit.create(GithubApi::class.java) }
 
-    override val usersRepo: UsersRepo by lazy { RetrofitUsersRepoImpl(api) }
 
-    override val randomString: String
+    private val usersRepo: UsersRepo by lazy { RetrofitUsersRepoImpl(api) }
+
+    private val randomString: String
         get() = UUID.randomUUID().toString()
 }
