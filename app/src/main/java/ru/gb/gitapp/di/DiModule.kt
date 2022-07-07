@@ -3,18 +3,17 @@ package ru.gb.gitapp.di
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.gb.dil.Di
-import ru.gb.dil.Fabric
-import ru.gb.dil.Singleton
+import ru.gb.dil.Module
+import ru.gb.dil.get
 import ru.gb.gitapp.data.retrofit.GithubApi
 import ru.gb.gitapp.data.retrofit.RetrofitUsersRepoImpl
 import ru.gb.gitapp.domain.repos.UsersRepo
 import java.util.*
 
-class DiModule {
+val appModule = Module {
+    val baseUrl = "https://api.github.com/"
 
-    private val baseUrl = "https://api.github.com/"
-    private val retrofit: Retrofit by lazy {
+    singleton<Retrofit> {
         Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
@@ -22,16 +21,9 @@ class DiModule {
             .build()
     }
 
-    private val api: GithubApi by lazy { retrofit.create(GithubApi::class.java) }
+    singleton<GithubApi> { get<Retrofit>().create(GithubApi::class.java) }
 
-    private val usersRepo: UsersRepo by lazy { RetrofitUsersRepoImpl(api) }
+    singleton<UsersRepo> { RetrofitUsersRepoImpl(get()) }
 
-    private val randomString: String
-        get() = UUID.randomUUID().toString()
-
-
-    init {
-        Di.add(UsersRepo::class, Singleton { usersRepo })
-        Di.add(String::class, Fabric { randomString })
-    }
+    fabric { UUID.randomUUID().toString() }
 }

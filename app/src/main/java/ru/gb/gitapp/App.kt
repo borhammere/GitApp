@@ -3,11 +3,12 @@ package ru.gb.gitapp
 import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
-import ru.gb.gitapp.di.DiModule
+import ru.gb.gitapp.di.appModule
 
 class App : Application() {
+
     init {
-        DiModule()
+        appModule.install()
     }
 }
 
