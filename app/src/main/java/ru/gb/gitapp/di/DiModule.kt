@@ -5,6 +5,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.gb.dil.Module
 import ru.gb.dil.get
+import ru.gb.gitapp.data.FakeUsersRepoImpl
 import ru.gb.gitapp.data.retrofit.GithubApi
 import ru.gb.gitapp.data.retrofit.RetrofitUsersRepoImpl
 import ru.gb.gitapp.domain.repos.UsersRepo
@@ -23,7 +24,9 @@ val appModule = Module {
 
     singleton<GithubApi> { get<Retrofit>().create(GithubApi::class.java) }
 
-    singleton<UsersRepo> { RetrofitUsersRepoImpl(get()) }
+    singleton<UsersRepo>("remote") { RetrofitUsersRepoImpl(get()) }
+
+    singleton<UsersRepo>("local") { FakeUsersRepoImpl() }
 
     fabric { UUID.randomUUID().toString() }
 }

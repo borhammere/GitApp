@@ -12,7 +12,7 @@ import ru.gb.gitapp.domain.entities.UserEntity
 import ru.gb.gitapp.domain.repos.UsersRepo
 
 class UsersViewModel : UsersContract.ViewModel {
-    private val usersRepo: UsersRepo by inject()
+    private val usersRepo: UsersRepo by inject("remote")
 
     override val usersLiveData: Observable<List<UserEntity>> = BehaviorSubject.create()
     override val errorLiveData: Observable<Throwable> = BehaviorSubject.create()

@@ -3,10 +3,10 @@ package ru.gb.dil
 import kotlin.reflect.KClass
 
 object Di {
-    private val dependenciesHolder = HashMap<KClass<*>, DependencyFabric<*>>()
+    private val dependenciesHolder = HashMap<Qualifier, DependencyFabric<*>>()
 
-    fun <T : Any> get(clazz: KClass<T>): T {
-        val dependencyFabric = dependenciesHolder[clazz]
+    fun <T : Any> get(qualifier: Qualifier): T {
+        val dependencyFabric = dependenciesHolder[qualifier]
         if (dependencyFabric != null) {
             return dependencyFabric.get() as T
         } else {
@@ -14,23 +14,38 @@ object Di {
         }
     }
 
-    fun <T : Any> add(clazz: KClass<T>, dependencyFabric: DependencyFabric<T>) {
-        dependenciesHolder[clazz] = dependencyFabric
+    fun <T : Any> add(qualifier: Qualifier, dependencyFabric: DependencyFabric<T>) {
+        if (dependenciesHolder.containsKey(qualifier)) {
+            throw IllegalStateException("Dep is in graph already")
+        }
+        dependenciesHolder[qualifier] = dependencyFabric
     }
 
     inline fun <reified T : Any> add(dependencyFabric: DependencyFabric<T>) {
-        add(T::class, dependencyFabric)
+        add(Qualifier(T::class), dependencyFabric)
     }
-
 
 }
 
+data class Qualifier(
+    private val clazz: KClass<*>,
+    private val name: String = "default_name"
+)
+
 inline fun <reified T : Any> get(): T {
-    return Di.get(T::class)
+    return Di.get(Qualifier(T::class))
+}
+
+inline fun <reified T : Any> get(name: String): T {
+    return Di.get(Qualifier(T::class, name))
 }
 
 inline fun <reified T : Any> inject() = lazy {
     get<T>()
+}
+
+inline fun <reified T : Any> inject(name: String) = lazy {
+    get<T>(name)
 }
 
 abstract class DependencyFabric<T : Any>(protected val creator: () -> Any) {
@@ -56,7 +71,16 @@ class Module(private val block: Module.() -> Unit) {
         Di.add(Singleton<T>(creator))
     }
 
+
+    inline fun <reified T : Any> singleton(name: String, noinline creator: () -> T) {
+        Di.add(Qualifier(T::class, name), Singleton<T>(creator))
+    }
+
     inline fun <reified T : Any> fabric(noinline creator: () -> T) {
         Di.add(Fabric<T>(creator))
+    }
+
+    inline fun <reified T : Any> fabric(name: String, noinline creator: () -> T) {
+        Di.add(Qualifier(T::class, name), Fabric<T>(creator))
     }
 }
