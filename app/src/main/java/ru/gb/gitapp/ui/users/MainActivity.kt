@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import ru.gb.dil.get
 import ru.gb.gitapp.app
 import ru.gb.gitapp.databinding.ActivityMainBinding
 import ru.gb.gitapp.domain.entities.UserEntity
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun extractViewModel(): UsersContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(app.di.get(UsersRepo::class))
+            ?: UsersViewModel()
     }
 
     override fun onRetainCustomNonConfigurationInstance(): UsersContract.ViewModel {
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         binding.refreshButton.setOnClickListener {
             viewModel.onRefresh()
-            Toast.makeText(this, app.di.get(String::class), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, get<String>(), Toast.LENGTH_SHORT).show()
         }
         initRecyclerView()
 

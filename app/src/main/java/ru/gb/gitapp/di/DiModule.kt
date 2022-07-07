@@ -4,12 +4,14 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.gb.dil.Di
+import ru.gb.dil.Fabric
+import ru.gb.dil.Singleton
 import ru.gb.gitapp.data.retrofit.GithubApi
 import ru.gb.gitapp.data.retrofit.RetrofitUsersRepoImpl
 import ru.gb.gitapp.domain.repos.UsersRepo
 import java.util.*
 
-class DiModule(di: Di) {
+class DiModule {
 
     private val baseUrl = "https://api.github.com/"
     private val retrofit: Retrofit by lazy {
@@ -29,7 +31,7 @@ class DiModule(di: Di) {
 
 
     init {
-        di.add(UsersRepo::class, usersRepo)
-        di.add(randomString)
+        Di.add(UsersRepo::class, Singleton { usersRepo })
+        Di.add(String::class, Fabric { randomString })
     }
 }

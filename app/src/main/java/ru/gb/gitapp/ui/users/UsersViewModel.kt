@@ -7,12 +7,12 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.Subject
+import ru.gb.dil.inject
 import ru.gb.gitapp.domain.entities.UserEntity
 import ru.gb.gitapp.domain.repos.UsersRepo
 
-class UsersViewModel(
-    private val usersRepo: UsersRepo
-) : UsersContract.ViewModel {
+class UsersViewModel : UsersContract.ViewModel {
+    private val usersRepo: UsersRepo by inject()
 
     override val usersLiveData: Observable<List<UserEntity>> = BehaviorSubject.create()
     override val errorLiveData: Observable<Throwable> = BehaviorSubject.create()
